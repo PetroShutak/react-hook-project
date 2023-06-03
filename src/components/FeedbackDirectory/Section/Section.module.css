@@ -1,0 +1,13 @@
+.section {
+    padding: 20px 0;
+    background-color: #e7e7e7;
+    overflow: hidden;
+    color: black;
+    text-align: center;
+}
+.title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+}
