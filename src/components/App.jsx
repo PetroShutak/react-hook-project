@@ -15,7 +15,17 @@ const App = () => {
       return <ImageFinder />;
     } else {
       return (
-        <div>
+        <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: '24px',
+          color: '#010101'
+        }}
+        >
           <h1>Welcome to the Main Page</h1>
           <button onClick={() => setCurrentPage('feedback')}>
             Go to Feedback
