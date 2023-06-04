@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
 const AppContainer = styled.div`
+  min-height: 100vh;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
