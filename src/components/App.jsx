@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Feedback from './FeedbackDirectory/FeedbackApp';
 import PhoneBook from './PhoneBookDirectory/PhoneBookApp';
 import ImageFinder from './ImageFinder/ImageFinderApp';
+import AppHeader from './FeedbackDirectory/FeedbackAppHeader';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(null);
@@ -41,7 +42,12 @@ const App = () => {
     }
   };
 
-  return <div>{renderPage()}</div>;
+  return ( 
+  <div>
+    <AppHeader setCurrentPage={setCurrentPage} />
+    {renderPage()}
+    </div>
+    )
 };
 
 export default App;
