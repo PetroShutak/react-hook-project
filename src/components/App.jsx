@@ -44,7 +44,7 @@ const App = () => {
 
   return ( 
   <div>
-    <AppHeader setCurrentPage={setCurrentPage} />
+     {currentPage && <AppHeader setCurrentPage={setCurrentPage} />}
     {renderPage()}
     </div>
     )

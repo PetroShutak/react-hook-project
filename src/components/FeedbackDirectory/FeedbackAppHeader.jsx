@@ -1,21 +1,47 @@
 import React from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
 
-const AppHeader = ({ setCurrentPage }) => {
+const AppHeader = ({ setCurrentPage, currentPage  }) => {
   const handleGoBack = () => {
     setCurrentPage(null);
   };
 
+  if (currentPage === null) {
+    return null; // Не рендеримо AppHeader, якщо поточна сторінка є null
+  }
+
   return (
     <div
       style={{
+        position: 'absolute',
+        zIndex: '1300',
+        left: 20,
+        top: 20,
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
-        height: '50px',
-        background: '#f2f2f2',
-      }}
+        padding: '0 10px',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        borderRadius: '4px',
+        hover: 'box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4)',
+
+    }}
+    onClick={handleGoBack}
     >
-      <button onClick={handleGoBack}>Go Back to Main Page</button>
+      <button
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: 'none',
+          border: 'none',
+          outline: 'none',
+          cursor: 'pointer',
+          fontSize: '18px',
+          fontWeight: 'bold',
+        }}
+      >
+        <FaArrowLeft style={{ marginRight: '5px' }} />
+        Go Back 
+      </button>
     </div>
   );
 };
