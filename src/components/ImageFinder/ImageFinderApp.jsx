@@ -44,7 +44,7 @@ class ImageFinder extends Component {
           } else {
             const totalCount = this.state.images.length;
             this.notify('Loaded first images.', totalCount + images.length);
-            
+
           }
           this.setState({ images });
         } catch (error) {
@@ -91,7 +91,6 @@ class ImageFinder extends Component {
   notify = (message, totalCount) => {
     toast(`${message} Found: ${totalCount} pcs.`);
   };
-
 
   handleOpenModal = selectedImage => {
     this.setState({ selectedImage });

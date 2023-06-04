@@ -7,7 +7,7 @@ const AppHeader = ({ setCurrentPage, currentPage  }) => {
   };
 
   if (currentPage === null) {
-    return null; // Не рендеримо AppHeader, якщо поточна сторінка є null
+    return null; 
   }
 
   return (
@@ -15,8 +15,8 @@ const AppHeader = ({ setCurrentPage, currentPage  }) => {
       style={{
         position: 'absolute',
         zIndex: '1300',
-        left: 20,
-        top: 20,
+        left: 0,
+        top: 0,
         display: 'flex',
         alignItems: 'center',
         padding: '0 10px',
