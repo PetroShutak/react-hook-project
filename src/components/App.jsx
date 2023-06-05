@@ -37,7 +37,7 @@ const App = () => {
     } else {
       return (
         <AppContainer>
-          <h1>Welcome to the Main Page</h1>
+          <h1>Introduction to React</h1>
           <Button
             backgroundColor="#2196f3"
             hoverColor="#1565c0"
