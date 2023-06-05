@@ -12,8 +12,12 @@ const AppContainer = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 24px;
-  color: #010101;
+  color: white;
   font-family: Arial, sans-serif;
+  background-image: url(https://textbook.edu.goit.global/react-zr7b4k/v1/uk/img/lesson-07/hooks-banner.jpg);
+  background-size: contain 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const Button = styled.button`
