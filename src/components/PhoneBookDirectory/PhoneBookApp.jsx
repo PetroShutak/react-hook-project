@@ -4,21 +4,18 @@ import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 import Footer from './Footer/Footer';
-import { Wraper as Wrapper } from './App.styled';
+import { Wraper } from './App.styled';
 
 const PhoneBook = () => {
-  const [contacts, setContacts] = useState([]);
+  const KEY = 'contacts';
   const [filter, setFilter] = useState('');
 
-  useEffect(() => {
-    const savedContacts = localStorage.getItem('contacts');
-    if (savedContacts) {
-      setContacts(JSON.parse(savedContacts));
-    }
-  }, []);
+  const [contacts, setContacts] = useState(() => {
+    return JSON.parse(localStorage.getItem(KEY)) ?? [];
+  });
 
   useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+    localStorage.setItem(KEY, JSON.stringify(contacts));
   }, [contacts]);
 
   const handleFilterChange = event => {
@@ -50,7 +47,7 @@ const PhoneBook = () => {
 
   return (
     <>
-      <Wrapper>
+      <Wraper>
         <h1>Phonebook</h1>
         <ContactForm contacts={contacts} onAddContact={handleAddContact} />
 
@@ -60,7 +57,7 @@ const PhoneBook = () => {
           contacts={filteredContacts}
           onDeleteContact={handleDeleteContact}
         />
-      </Wrapper>
+      </Wraper>
       <Footer />
     </>
   );
@@ -77,8 +74,6 @@ PhoneBook.propTypes = {
 };
 
 export default PhoneBook;
-
-
 
 // import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
@@ -159,7 +154,6 @@ export default PhoneBook;
 // };
 
 // export default PhoneBook;
-
 
 // import { Component } from 'react';
 // import PropTypes from 'prop-types';
