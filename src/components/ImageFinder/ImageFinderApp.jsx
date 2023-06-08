@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,126 +9,107 @@ import Button from './Button/Button';
 import Loader from './Loader/Loader';
 import Modal from './Modal/Modal';
 import { AppStyled } from './App.styled';
+import { scrollToNewItems } from 'utils/scrollTo';
 
-class ImageFinder extends Component {
-  state = {
-    images: [],
-    currentPage: 1,
-    query: '',
-    isLoading: false,
-    selectedImage: null,
-    totalCount: 0,
-  };
+const App = () => {
+  const [images, setImages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
 
-  galleryRef = null;
-
-  componentDidMount() {
-    this.galleryRef = React.createRef();
-  }
-
-  handleSearchSubmit = async query => {
-    this.setState(
-      {
-        images: [],
-        currentPage: 1,
-        query,
-        isLoading: true,
-      },
-      async () => {
-        try {
-          const images = await fetchImages(query, 1);
-
-          if (images.length === 0 && images.length <= 12) {
-            this.setState({ isLoading: false });
-            this.notify('No images found.', this.state.totalCount);
-          } else {
-            const totalCount = this.state.images.length;
-            this.notify('Loaded first images.', totalCount + images.length);
-
-          }
-          this.setState({ images });
-        } catch (error) {
-          this.notify('Invalid request.', this.state.totalCount);
-          this.setState({ error: error.message });
-        }
-
-        this.setState({ isLoading: false });
-      }
-    );
-  };
-
-  handleLoadMore = async () => {
-    const { currentPage, query } = this.state;
-    const nextPage = currentPage + 1;
-
-    this.setState({ isLoading: true });
+  const handleSearchSubmit = async query => {
+    setImages([]);
+    setCurrentPage(1);
+    setQuery(query);
+    setIsLoading(true);
 
     try {
-      const images = await fetchImages(query, nextPage);
-      if (images.length === 0 && images.length <= 12) {
-        this.notify('No more images found.', this.state.images.length);
-        this.setState({ isLoading: false });
+      const fetchedImages = await fetchImages(query, 1);
+
+      if (fetchedImages.length === 0 && fetchedImages.length <= 12) {
+        setIsLoading(false);
+        notify('No images found.', totalCount);
+      } else {
+        const totalCount = fetchedImages.length;
+        notify('Loaded first images.', totalCount);
+      }
+      setImages(fetchedImages);
+    } catch (error) {
+      notify('Invalid request.', totalCount);
+    }
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    setTotalCount(prevState => prevState + images.length);
+  }, [images]);
+
+  const handleLoadMore = async () => {
+    const nextPage = currentPage + 1;
+
+    setIsLoading(true);
+
+    try {
+      const fetchedImages = await fetchImages(query, nextPage);
+      if (fetchedImages.length === 0 && fetchedImages.length <= 12) {
+        notify('No more images found.', fetchedImages.length);
+        setIsLoading(false);
 
         return;
       }
-      this.setState(prevState => ({
-        images: [...prevState.images, ...images],
-        currentPage: nextPage,
-      }));
+      setImages(prevState => [...prevState, ...fetchedImages]);
+      setCurrentPage(nextPage);
     } catch (error) {
-      this.setState({ error: error.message });
+      console.log(error);
     }
 
-    this.setState({ isLoading: false });
-    if (this.galleryRef && this.galleryRef.current) {
-      this.galleryRef.current.scrollToNewItems();
-    }
-
-    const totalCount = this.state.images.length;
-    this.notify('Loaded next images.', totalCount);
+    setIsLoading(false);
+    const totalCount = images.length;
+    notify('Loaded next images.', totalCount);
+    scrollToNewItems();
   };
 
-  notify = (message, totalCount) => {
+  const notify = (message, totalCount) => {
     toast(`${message} Found: ${totalCount} pcs.`);
   };
 
-  handleOpenModal = selectedImage => {
-    this.setState({ selectedImage });
+  const handleOpenModal = selectedImage => {
+    setSelectedImage(selectedImage);
   };
 
-  handleCloseModal = () => {
-    this.setState({ selectedImage: null });
+  const handleCloseModal = () => {
+    setSelectedImage(null);
   };
 
-  render() {
-    const { images, isLoading, selectedImage } = this.state;
-    const isShowButton = images.length > 0 && !isLoading && images.length >= 12;
+  const isShowButton =
+    images.length > 0 &&
+    !isLoading &&
+    images.length >= 12 &&
+    images.length % 12 === 0;
 
-    return (
-      <>
-        <ToastContainer />
-        <Searchbar onSubmit={this.handleSearchSubmit} />
-        <AppStyled>
-          <ImageGallery
-            images={images}
-            onOpenModal={this.handleOpenModal}
-            ref={this.galleryRef}
+  return (
+    <>
+      <ToastContainer />
+      <Searchbar onSubmit={handleSearchSubmit} />
+      <AppStyled>
+        <ImageGallery images={images} onOpenModal={handleOpenModal} />
+        {isShowButton && <Button onClick={handleLoadMore} />}
+        {isLoading && <Loader />}
+        {selectedImage && (
+          <Modal
+            largeImageURL={selectedImage.largeImageURL}
+            onClose={handleCloseModal}
           />
-          {isShowButton && <Button onClick={this.handleLoadMore} />}
-          {isLoading && <Loader />}
-          {selectedImage && (
-            <Modal
-              largeImageURL={selectedImage.largeImageURL}
-              onClose={this.handleCloseModal}
-            />
-          )}
-        </AppStyled>
-      </>
-    );
-  }
-}
+        )}
+      </AppStyled>
+    </>
+  );
+};
 
-ImageFinder.propTypes = {
+App.propTypes = {
   images: PropTypes.arrayOf(PropTypes.object),
   currentPage: PropTypes.number,
   query: PropTypes.string,
@@ -136,4 +117,4 @@ ImageFinder.propTypes = {
   selectedImage: PropTypes.object,
 };
 
-export default ImageFinder;
+export default App;

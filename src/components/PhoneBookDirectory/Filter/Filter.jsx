@@ -2,7 +2,6 @@ import React from 'react';
 import PropType from 'prop-types';
 import { Label, Input } from './Filter.styled';
 
-
 const Filter = ({ value, onChange }) => {
   return (
     <Label>
