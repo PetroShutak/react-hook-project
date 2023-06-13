@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 const AppContainer = styled.div`
-  min-height: 100vh;
+  height: calc(100vh - 40px);
+  width: calc(100vw -30px);
   padding: 20px;
   justify-content: center;
   align-items: center;
@@ -23,7 +24,7 @@ const AppContainer = styled.div`
 const Button = styled.button`
   padding: 10px 20px;
   font-size: 18px;
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${props => props.backgroundColor};
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -31,7 +32,7 @@ const Button = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: ${(props) => props.hoverColor};
+    background-color: ${props => props.hoverColor};
   }
 `;
 
